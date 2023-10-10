@@ -1,0 +1,47 @@
+---
+title: "lab_1"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: read from csv
+#| include: true
+#| warning: false
+#| echo: false
+
+  library(tidyverse)
+  library(data.table)
+
+
+
+census2021 <- read.csv("data/census2021_ethn/liv_pop.csv",row.names = )
+#view(census2021)
+#head(census2021) # read first 5 rows
+#tail(census2021) # read first 5 rows
+#summary(census2021)
+#t(summary(census2021))
+#view(census2021)
+
+census2021 <- census2021%>%mutate(Total_Population = rowSums(select(., Africa, Middle.East.and.Asia, Europe, The.Americas.and.the.Caribbean, Antarctica.and.Oceania)))
+
+#head(census2021)
+
+#census2021 <- census2021 %>% mutate(new_column = 1)
+
+#census2021 <- subset(census2021, select = -new_column)
+#census2021$new_column <- 1
+
+#census2021 <- subset(census2021, select = -new_column)
+
+#pop900 <- census2021 %>%
+  #filter(Total_Population > 1900)
+
+#pop900
+
+db_pop_sorted <- census2021 %>%
+  arrange(desc(Total_Population)) #sorts the dataframe by the "Total_Pop" column in descending order 
+
+head(db_pop_sorted)
+
+```

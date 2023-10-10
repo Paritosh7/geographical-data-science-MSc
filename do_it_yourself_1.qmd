@@ -1,0 +1,53 @@
+---
+title: "DO IT YOURSELF - 1"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: read from csv
+#| include: true
+#| warning: false
+#| echo: false
+
+  library(tidyverse)
+  library(data.table)
+
+url <- "https://docs.google.com/spreadsheets/d/e/2PACX-1vRa7OIBiz7-yqmgwUEn4V5Wm1TO8rGow_wQVS1PWp--UTCAKqNUhtifECO5ZR9XrMd6Ddq9NxQwf1ll/pub?gid=0&single=true&output=csv"
+
+
+# Read the data from the URL into a DataFrame
+casualties <- read.csv(url)
+
+casualties
+
+# Minimum number of civilian casualties 
+
+min_cas_mnth <- group_by(casualties) %>% slice(which.min(casualties$Civilians))
+
+# Minimum Casualty month
+
+min_cas_mnth$Month
+
+#2. How many NATO casualties were registered in August 2008?
+
+nat_2008_cas <- casualties %>% filter(casualties$Year == "2008")
+
+sum(as.numeric(nat_2008_cas$Nato..detailed.in.spreadsheet.))
+
+# What is the month with the most total number of casualties?
+
+# Mutating the dataframe to transform string values to numeric (double)
+casualties <- casualties %>% mutate_at(c('Taliban','Civilians','Afghan.forces','Nato..detailed.in.spreadsheet.','Nato...official.figures'),as.numeric)
+
+# Adding a new column which adds the total casualties my month and making sure that NA are ignored. 
+casualties <- casualties%>% mutate(Cas_by_month = rowSums(select(.,Taliban,Civilians,Afghan.forces,Nato..detailed.in.spreadsheet.,Nato...official.figures),na.rm = TRUE))
+
+max_casualties_row <- group_by(casualties) %>% slice(which.max(casualties$Civilians))
+
+max_casualties_row$Month
+
+
+
+
+```
